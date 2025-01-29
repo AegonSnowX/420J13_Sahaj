@@ -1,20 +1,71 @@
-// HelloWorld.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include <stdlib.h>
+#include <string>
+#include "UserAccount.h"
+using namespace std;
 
-int main()
-{
-    std::cout << "Hello World!\n";
+
+
+int main() {
+	int accountID;
+	string userName, passWord;
+	//loops until user enter all fields correctly
+	while (true) {
+		cout << "Enter Account ID: ";
+		cin >> accountID;
+		cin.ignore(); // Clear the newline from input buffer
+
+		// this ensures no failure in Input to avoid crashing of program
+		if (cin.fail()) {
+			cin.clear(); // Clear error state
+			cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear buffer
+			system("cls"); //found this on internet to clear the console , makes program readable in console
+			cout << "Invalid input. Please try again." << endl;
+		}
+		else {
+			// there were no conditions how a username must look , so there is no validation for username and password 
+			cout << "Enter Username: ";
+			getline(cin, userName);
+
+			cout << "Enter Password: ";
+			getline(cin, passWord);
+			system("cls");
+			break; // breaks out of loop
+		}
+	}
+
+	// Create a UserAccount object
+	UserAccount acc(accountID, userName, passWord);
+
+	// Login process
+	string enteredUserName, enteredPassword;
+
+	//again loops until everything meets
+	while (true) {
+		
+		cout << "\nLog in to your account" << endl;
+		cout << "Enter Username: ";
+		getline(cin, enteredUserName);
+
+		cout << "Enter Password: ";
+		getline(cin, enteredPassword);
+
+		if (acc.Login(enteredUserName, enteredPassword))  // using the login function that we created earlier 
+		{
+			cout << "Login successful!\n";
+			cout << "Account ID: " << acc.getAccountID() << endl;
+			break; // get out of loop
+		}
+		else {
+			// if password and username doesnt meet , it will prompt user again to enter and keeps on looping
+			system("cls");\
+
+			cout << "Invalid username or password. Please try again.\n";
+		}
+	}
+
+	return 0;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+// i think its done
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
